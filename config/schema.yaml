@@ -1,0 +1,14 @@
+columns:
+  - price
+  - bedroom
+  - bathroom
+  - area(sqft)
+  - country
+  - city
+  - address
+  - propert_type
+  - purpose
+  - furnishing
+  - completion_status
+  - handover
+  - project_name

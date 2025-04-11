@@ -7,7 +7,7 @@ from src.entity.artifact_entity import DataIngestionArtifact
 from sklearn.model_selection import train_test_split
 
 import pandas as pd
-import sys
+import sys,os
 
 class DataIngestion:
     """
@@ -15,7 +15,7 @@ class DataIngestion:
     Description : this class will ingest the data from mongodb
 
     Output : reutrns csv 
-    On Failuer : raise CustomException
+    On Failure : raise CustomException
     """
     def __init__(self,data_ingestion_config : DataIngestionConfig = DataIngestionConfig()):
         """
@@ -25,7 +25,7 @@ class DataIngestion:
             self.data_ingestion_config = data_ingestion_config
 
         except Exception as e:
-            CustomException(e,sys)
+            raise CustomException(e,sys)
 
     def export_data_to_feature_store(self) -> pd.DataFrame:
         """
@@ -48,7 +48,7 @@ class DataIngestion:
         except Exception as e:
             raise CustomException(e,sys)    
 
-    def train_test_split(self , dataframe : pd.Dataframe) ->None:
+    def train_test_split(self , dataframe : pd.DataFrame) -> None:
         """
         This method will be split the dataframe intot train and test 
         """ 
@@ -92,8 +92,10 @@ class DataIngestion:
                 training_file_path=self.data_ingestion_config.training_file_path,
                 test_file_path=self.data_ingestion_config.testing_file_path
             )
-            logging.info("Data Ingestion Completed Sucessfully...")
-            logging.info(f"Data ingestion artifact {data_ingestion_artifact}")
+            logging.info(f"Data Ingestion Completed Successfully. Artifact: {data_ingestion_artifact}")
+
+
+            return data_ingestion_artifact
 
         except Exception as e:
             raise CustomException(e,sys)
