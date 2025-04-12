@@ -36,7 +36,9 @@ DATA TRANSFORMATION RELATED CONSTANT
 """
 DATA_TRANSFORMATION_COLLECTION_NAME : str = "Data_transformation"
 DATA_TRANSFORMATION_OBJ_DIR : str = "preprocessing"
-FEATURE_ENGEENERING_OBJ_DIR :str ="feature_engeerring"
+FEATURE_ENGEENERING_DATA_DIR :str ="feature_engeerring"
 DATA_TRANSFORMATION_DATA_DIR : str ="transformation"
+DATA_TRANFORMATION_MODEL_OBJ :str = "transform_obj"
+
 
 

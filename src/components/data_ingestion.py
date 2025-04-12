@@ -37,12 +37,13 @@ class DataIngestion:
             dataframe=uaedata.export_into_df(collection_name=self.data_ingestion_config.collection_name)
 
             logging.info(f"Found dataframe with shape : {dataframe.shape}")
+            
             feature_store_file_path=self.data_ingestion_config.feature_store_file_path
             dir_path=os.path.dirname(feature_store_file_path)
             os.makedirs(dir_path,exist_ok=True)
             logging.info(f"Saving the exported data into the path :{feature_store_file_path}")
 
-            dataframe.to_csv(dir_path,index=False,header=True)  
+            dataframe.to_csv(feature_store_file_path,index=False)  
             return dataframe
         
         except Exception as e:
@@ -62,8 +63,8 @@ class DataIngestion:
             os.makedirs(dir_path,exist_ok=True)
 
             logging.info("Exporting the data into traing and test sets.")
-            train_set.to_csv(self.data_ingestion_config.training_file_path,index=False,headers=True)
-            test_set.to_csv(self.data_ingestion_config.testing_file_path,index=False,headers=True)
+            train_set.to_csv(self.data_ingestion_config.training_file_path,index=False)
+            test_set.to_csv(self.data_ingestion_config.testing_file_path,index=False)
 
             logging.info("Exported into train and test file path.")
 
@@ -90,7 +91,7 @@ class DataIngestion:
 
             data_ingestion_artifact=DataIngestionArtifact(
                 training_file_path=self.data_ingestion_config.training_file_path,
-                test_file_path=self.data_ingestion_config.testing_file_path
+                testing_file_path=self.data_ingestion_config.testing_file_path
             )
             logging.info(f"Data Ingestion Completed Successfully. Artifact: {data_ingestion_artifact}")
 

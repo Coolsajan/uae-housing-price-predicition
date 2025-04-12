@@ -98,7 +98,7 @@ class FeatureEngineering:
     def fit_transform(self, X, y=None):
         return self.transfrom(X, y)
 
-    def transfrom(self,X:pd.DataFrame,y:None):
+    def transfrom(self,X:pd.DataFrame,y=None):
         try:
             dataframe=self.transform_data(X)
 
@@ -112,8 +112,8 @@ class DataTransformation:
     :param data_ingestion_artifact: Output reference of data ingestion artifact stage
     :param data_transformation_config: configuration for data transformation
     """
-    def __init__(self,data_transformation_config:DataTransformationConfig=DataTransformationConfig(),
-                data_ingestion_artifact:DataIngestionArtifact=DataIngestionArtifact()):
+    def __init__(self,data_transformation_config:DataTransformationConfig,
+                data_ingestion_artifact:DataIngestionArtifact):
         """
         : parms data_transformation_config : configuration for datatransformation
         """
@@ -167,21 +167,23 @@ class DataTransformation:
         try:
             logging.info("Data Transformation Started")
             train_data=DataTransformation.read_data(file_path=self.data_ingestion_artifact.training_file_path)
-            test_data=DataTransformation.read_data(file_path=self.data_ingestion_artifact.test_file_path)
+            test_data=DataTransformation.read_data(file_path=self.data_ingestion_artifact.testing_file_path)
 
             logging.info("Training and Testing Data obtained")
             logging.info("Feature Engineering started.")
 
             fe_obj=self.get_feature_engineering_obj()
             logging.info("Feature Enginnering obj obtained.")
-            train_data=fe_obj.fit_transform(train_data)
-            test_data=fe_obj.transfrom(test_data)
+            train_data=fe_obj.fit_transform(X=train_data)
+            test_data=fe_obj.transfrom(X=test_data)
 
-            dir_path=dir_path = self.data_transformation_config.data_transformation_dir
-            os.makedirs(dir_path,exist_ok=True)
+            feature_eng_train_dir = os.path.dirname(self.data_transformation_config.feature_eng_train_data_file_path)
+            os.makedirs(feature_eng_train_dir, exist_ok=True)
+            train_data.to_csv(self.data_transformation_config.feature_eng_train_data_file_path, index=False)
 
-            train_data.to_csv(self.data_transformation_config.feature_enginerring_train_data_file_path,index=False)
-            test_data.to_csv(self.data_transformation_config.feature_enginerring_test_data_file_path,index=False)
+            feature_eng_test_dir = os.path.dirname(self.data_transformation_config.feature_eng_test_data_file_path)
+            os.makedirs(feature_eng_test_dir, exist_ok=True)
+            test_data.to_csv(self.data_transformation_config.feature_eng_test_data_file_path, index=False)
 
 
             X_train=train_data.drop(columns=[TARGET_COLUMN],axis=1)
@@ -198,26 +200,39 @@ class DataTransformation:
             X_test=preprocessor.transform(X_test)
 
             logging.info("X_train,X_test transfromed.")
-
-            train_arr=np.c_(X_train,np.array(y_train))
-            test_arr=np.c_(X_test,np.array(y_test))
-
+            logging.info(f"X_train shape:{X_train.shape},y_train shape: {np.array(y_train).shape}")
+            logging.info(f"X_test shape:{X_test.shape},y_test shape: {np.array(y_test).shape}")
+            train_arr=np.c_[X_train,(np.array(y_train)).reshape(1,-1)]
+            test_arr=np.c_[X_test,(np.array(y_test)).reshape(1,-1)]
+            
+            logging.info(f"training and test {train_arr.shape},{test_arr.shape}.")
             logging.info("training and test arr obtained.")
 
-            save_numpy_array_data(file_path=self.data_transformation_config.transformed_train_data_file_path,array=train_arr)
-            save_numpy_array_data(file_path=self.data_transformation_config.transformed_test_data_file_path,array=test_arr)
+            # Create directories for numpy arrays
+            transformed_train_dir = os.path.dirname(self.data_transformation_config.transformed_train_data_file_path)
+            os.makedirs(transformed_train_dir, exist_ok=True)
+            save_numpy_array_data(self.data_transformation_config.transformed_train_data_file_path, train_arr)
 
-            logging.info("Train and test arr saved....")
+            transformed_test_dir = os.path.dirname(self.data_transformation_config.transformed_test_data_file_path)
+            os.makedirs(transformed_test_dir, exist_ok=True)
+            save_numpy_array_data(self.data_transformation_config.transformed_test_data_file_path, test_arr)
 
-            save_object(file_path=self.data_transformation_config.feature_engiineering_model_file_path,obj=fe_obj)
-            save_object(file_path=self.data_transformation_config.data_transformation_model_file_path,obj=preprocessor)
+            # Create directory for preprocessing object
+            model_obj_dir = os.path.dirname(self.data_transformation_config.transformed_model_obj)
+            os.makedirs(model_obj_dir, exist_ok=True)
+            save_object(self.data_transformation_config.transformed_model_obj, preprocessor)
+
+            # Create directory for feature engineering object
+            fe_obj_dir = os.path.dirname(self.data_transformation_config.feature_eng_obj)
+            os.makedirs(fe_obj_dir, exist_ok=True)
+            save_object(self.data_transformation_config.feature_eng_obj, fe_obj)
 
             logging.info("Saved FE and preprocess obj ....")
 
             data_transformation_artifact=DataTrasformationArtifact(
                 transformed_train_data_file_path=self.data_transformation_config.transformed_train_data_file_path,
                 transformed_test_data_file_path=self.data_transformation_config.transformed_test_data_file_path,
-                data_transformation_model_file_path=self.data_transformation_config.data_transformation_model_file_path
+                data_transformation_model_file_path=self.data_transformation_config.transformed_model_obj
             )
             return data_transformation_artifact
         except Exception as e:

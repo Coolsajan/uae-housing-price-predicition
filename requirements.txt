@@ -1,7 +1,8 @@
 pandas
-sklearn
+scikit-learn
 seaborn
 matplotlib
 pymongo
 certifi
 evidently
+dill
