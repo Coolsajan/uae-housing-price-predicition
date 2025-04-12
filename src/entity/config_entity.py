@@ -50,3 +50,9 @@ class DataTransformationConfig:
     feature_eng_test_data_file_path :str = os.path.join(data_transformation_dir,FEATURE_ENGEENERING_DATA_DIR,TEST_FILE_NAME)
     feature_eng_obj :str = os.path.join(data_transformation_dir,FEATURE_ENGEENERING_DATA_DIR,DATA_TRANFORMATION_MODEL_OBJ,FEATURE_ENGINEERING_FILE_NAME)
 
+
+@dataclass
+class ModelTrainerConfig:
+    model_trainer_dir : str = os.path.join(training_pipeline_config.artifact_dir,MODEL_TRANING_DIR)
+    model_trainer_trained_dir : str = os.path.join(model_trainer_dir,MODEL_TRAINER_TRAINED_DIR)
+    model_trained_obj : str = os.path.join(model_trainer_trained_dir,MODEL_FILE_NAME)

@@ -199,11 +199,17 @@ class DataTransformation:
             X_train=preprocessor.fit_transform(X_train)
             X_test=preprocessor.transform(X_test)
 
+            print(X_train,y_train)
             logging.info("X_train,X_test transfromed.")
-            logging.info(f"X_train shape:{X_train.shape},y_train shape: {np.array(y_train).shape}")
-            logging.info(f"X_test shape:{X_test.shape},y_test shape: {np.array(y_test).shape}")
-            train_arr=np.c_[X_train,(np.array(y_train)).reshape(1,-1)]
-            test_arr=np.c_[X_test,(np.array(y_test)).reshape(1,-1)]
+            logging.info(f"X_train shape:{X_train.shape},y_train shape: {np.array(X_train).shape}")
+            logging.info(f"X_test shape:{X_test.shape},y_test shape: {np.array(X_test).shape}")
+            X_train_dense = X_train.toarray() if hasattr(X_train, "toarray") else X_train
+            X_test_dense = X_test.toarray() if hasattr(X_test, "toarray") else X_test
+
+            train_arr = np.c_[ X_train_dense,np.array(y_train).reshape(-1, 1)]
+            test_arr = np.c_[X_test_dense, np.array(y_test).reshape(-1, 1)]
+
+            
             
             logging.info(f"training and test {train_arr.shape},{test_arr.shape}.")
             logging.info("training and test arr obtained.")

@@ -41,4 +41,10 @@ DATA_TRANSFORMATION_DATA_DIR : str ="transformation"
 DATA_TRANFORMATION_MODEL_OBJ :str = "transform_obj"
 
 
+"""
+MODEL SELECTION RELATED CONSTANT
+"""
+MODEL_TRANING_DIR : str = "model_trainer"
+MODEL_TRAINER_TRAINED_DIR : str ="model_trained"
+MODEL_TARINER_TRAINED_MODEL_NAME : str = "model.pkl"
 
