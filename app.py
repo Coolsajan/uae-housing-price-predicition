@@ -28,7 +28,7 @@ def prediction():
         data=data.get_data_to_df()
         model=PredictPrice()
         price_predicition=model.initiate_price_prediciton(data)
-
+        price_predicition=format(price_predicition, ",")
         return render_template("prediction.html",predicition_price=price_predicition)
 
 
