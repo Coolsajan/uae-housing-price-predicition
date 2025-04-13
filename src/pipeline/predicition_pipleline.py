@@ -8,20 +8,20 @@ import pandas as pd
 import numpy as np
 import sys
 
-class InputData:
+class PredictionData:
     def __init__(self,
                  bedroom : str
                  ,bathroom : int
-                 ,area:float
-                 ,country : str 
-                 ,city : str 
+                 ,area:float 
                  ,address : str
-                 ,propert_type : str
-                 ,purpose : str 
+                 ,propert_type : str 
                  ,furnishing : str
                  ,completion : str
                  ,handover : str
-                 ,project_name : str):
+                 ,project_name : str
+                 ,country : str ="UAE"
+                 ,city : str ="Dubai"
+                 ,purpose :str ="Sale"):
         try:
             if str(bedroom).isdigit():
                 self.bedroom = f"{bedroom} bed"
@@ -122,7 +122,7 @@ class PredictPrice:
         except Exception as e:
             raise CustomException(e,sys)
 
-    def initia_price_prediciton(self,input_df):
+    def initiate_price_prediciton(self,input_df):
         """This predict the price"""
         try:
             logging.info("price prediciton initiated")

@@ -4,7 +4,7 @@ from src.logger import logging
 import os ,sys
 import numpy as np
 import pickle
-import dill
+
 
 from sklearn.metrics import r2_score
 

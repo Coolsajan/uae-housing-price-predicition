@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UAE Property Price Predictor</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.9)
+          ),
+          url("{{ url_for('static', filename='images/background.jpg') }}")
+            no-repeat center center;
+        background-size: cover;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #333;
+      }
+
+      .container {
+        text-align: center;
+        padding: 2rem;
+        max-width: 800px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(0, 102, 204, 0.3);
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #0066cc;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        color: #444;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        background: linear-gradient(45deg, #0066cc, #1a8cff);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0, 102, 204, 0.5);
+      }
+
+      .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 102, 204, 0.6);
+        background: linear-gradient(45deg, #005bb8, #0077e6);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .features {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 3rem;
+      }
+
+      .feature {
+        flex: 1;
+        padding: 1rem;
+        margin: 0 1rem;
+        background-color: rgba(235, 245, 255, 0.7);
+        border-radius: 5px;
+        border-left: 3px solid #0066cc;
+      }
+
+      .feature h3 {
+        color: #0066cc;
+        margin-bottom: 0.5rem;
+      }
+
+      .skyline {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 150px;
+        background: url("{{ url_for('static', filename='images/skyline.jpg') }}")
+          no-repeat center bottom;
+        background-size: cover;
+        opacity: 0.2;
+      }
+
+      .header-accent {
+        height: 5px;
+        background: linear-gradient(90deg, #0066cc, #66b3ff);
+        width: 100%;
+        margin-bottom: 1.5rem;
+        border-radius: 10px;
+      }
+
+      .footer {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header-accent"></div>
+      <h1>UAE Property Price Predictor</h1>
+      <p>
+        Get accurate property price predictions across Dubai and the UAE using
+        our advanced AI-powered algorithm. Make informed real estate decisions
+        with market-leading accuracy.
+      </p>
+
+      <!-- Form that will submit to your Flask route -->
+      <form action="{{ url_for('prediction') }}" method="get">
+        <button type="submit" class="btn">Start Prediction</button>
+      </form>
+
+      <div class="features">
+        <div class="feature">
+          <h3>AI-Powered</h3>
+          <p>Advanced machine learning algorithms trained on UAE market data</p>
+        </div>
+        <div class="feature">
+          <h3>Market Insights</h3>
+          <p>
+            Comprehensive analysis of location, amenities, and market trends
+          </p>
+        </div>
+        <div class="feature">
+          <h3>95% Accuracy</h3>
+          <p>Trusted by real estate professionals across the Emirates</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          Providing accurate property valuations across Dubai, Abu Dhabi,
+          Sharjah and all Emirates
+        </p>
+      </div>
+    </div>
+
+    <div class="skyline"></div>
+  </body>
+</html>
