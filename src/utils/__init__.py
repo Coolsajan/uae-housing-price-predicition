@@ -4,6 +4,7 @@ from src.logger import logging
 import os ,sys
 import numpy as np
 import pickle
+import dill
 
 from sklearn.metrics import r2_score
 
@@ -54,7 +55,7 @@ def load_object(file_path: str) -> object:
     try:
 
         with open(file_path, "rb") as file_obj:
-            obj = pickle.load(file_obj)
+            obj = pickle.load(file_obj,)
 
         logging.info("Exited the load_object method of utils")
 
@@ -76,3 +77,4 @@ def evaluate_model(X_train, y_train, X_test, y_test, models):
 
     except Exception as e:
         raise CustomException(e, sys)
+    

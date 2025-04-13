@@ -11,6 +11,7 @@ class DataTrasformationArtifact:
     transformed_train_data_file_path : str
     transformed_test_data_file_path : str
     data_transformation_model_file_path :str
+    feature_eng_obj : str
 
 @dataclass
 class ModelTrainerArtifact:

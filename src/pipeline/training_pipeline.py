@@ -7,11 +7,11 @@ from src.entity.config_entity import DataIngestionConfig,DataTransformationConfi
 
 from src.components.data_ingestion import DataIngestion
 from src.components.data_transformation import DataTransformation
-from src.components.model_trainer import ModelTraning
+from src.components.model_trainer import ModelTraining
 
 import os,sys
 
-class ModelTraining:
+class ModelTrainingPipeline:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
         self.data_transformation_config = DataTransformationConfig()
@@ -51,7 +51,7 @@ class ModelTraining:
     def start_model_trainer(self,data_transformation_artifacts : DataTrasformationArtifact) -> ModelTrainerArtifact:
         """"This method is responsible for model trainer section in traning pipleline.."""
         try:
-            model_trainer=ModelTraning(data_transformation_artifact=data_transformation_artifacts,model_trainer_config=self.model_trainer_config)
+            model_trainer=ModelTraining(data_transformation_artifact=data_transformation_artifacts,model_trainer_config=self.model_trainer_config)
 
             model_trainer_artifacts=model_trainer.initiate_model_trainer()
 
@@ -69,7 +69,8 @@ class ModelTraining:
             data_transformation_artifact=self.start_data_transformation(data_ingestion_artifacts=data_ingestion_artifact)
 
             model_trainer_artifact=self.start_model_trainer(data_transformation_artifacts=data_transformation_artifact)
-
-            
+            print(model_trainer_artifact)
+            return model_trainer_artifact
+        
         except Exception as e:
             raise CustomException(e,sys)

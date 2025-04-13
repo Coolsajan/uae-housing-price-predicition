@@ -69,13 +69,8 @@ class FeatureEngineering:
                               
             logging.info("area data corrected.")
 
-            df['price']=df['price'].str.replace(",","").astype(int)
-            df['price']=np.log(df['price']+1)
-            logging.info("Price data corrected..")
-
             df['bathroom']=(df['bathroom'].str.split().str[0]).astype(int)
             logging.info("Bathroom data corrected.")
-
 
             maping_furnishing={'Unfurnished':0,'Furnished':1}
             maping_completion_status={'Off-Plan':0,'Ready':1}
@@ -133,6 +128,7 @@ class DataTransformation:
     def get_data_transfromation_obj(self):
         """This method will retrun data transformation object."""
         try:
+
             ohe_column=["address","propert_type"]
             minmax_column=["bedroom","bathroom","handover","project_name"]
             ct=ColumnTransformer([
@@ -169,6 +165,9 @@ class DataTransformation:
             train_data=DataTransformation.read_data(file_path=self.data_ingestion_artifact.training_file_path)
             test_data=DataTransformation.read_data(file_path=self.data_ingestion_artifact.testing_file_path)
 
+
+
+
             logging.info("Training and Testing Data obtained")
             logging.info("Feature Engineering started.")
 
@@ -189,8 +188,20 @@ class DataTransformation:
             X_train=train_data.drop(columns=[TARGET_COLUMN],axis=1)
             y_train=train_data[TARGET_COLUMN]
 
+            y_train=y_train.str.replace(",","").astype(int)
+            y_train=np.log(y_train+1)
+            logging.info("Price data corrected..")
+
+
+
+            
+
             X_test=test_data.drop(columns=[TARGET_COLUMN],axis=1)
             y_test=test_data[TARGET_COLUMN]
+            
+            y_test=y_test.str.replace(",","").astype(int)
+            y_test=np.log(y_test+1)
+            logging.info("Price data corrected..")
 
             logging.info("Input feature and target feature seperated.")
 
@@ -199,7 +210,6 @@ class DataTransformation:
             X_train=preprocessor.fit_transform(X_train)
             X_test=preprocessor.transform(X_test)
 
-            print(X_train,y_train)
             logging.info("X_train,X_test transfromed.")
             logging.info(f"X_train shape:{X_train.shape},y_train shape: {np.array(X_train).shape}")
             logging.info(f"X_test shape:{X_test.shape},y_test shape: {np.array(X_test).shape}")
@@ -238,7 +248,8 @@ class DataTransformation:
             data_transformation_artifact=DataTrasformationArtifact(
                 transformed_train_data_file_path=self.data_transformation_config.transformed_train_data_file_path,
                 transformed_test_data_file_path=self.data_transformation_config.transformed_test_data_file_path,
-                data_transformation_model_file_path=self.data_transformation_config.transformed_model_obj
+                data_transformation_model_file_path=self.data_transformation_config.transformed_model_obj,
+                feature_eng_obj=self.data_transformation_config.feature_eng_obj
             )
             return data_transformation_artifact
         except Exception as e:

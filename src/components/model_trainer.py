@@ -6,12 +6,13 @@ from src.entity.config_entity import ModelTrainerConfig
 import os,sys
 from src.utils import save_object,evaluate_model,load_numpy_array_data
 import numpy as np
+import pandas as pd
 
 from sklearn.linear_model import LinearRegression,Ridge ,Lasso
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor,GradientBoostingRegressor
 
-class ModelTraning:
+class ModelTraining:
     def __init__(self,data_transformation_artifact : DataTrasformationArtifact, model_trainer_config : ModelTrainerConfig):
         """
         :param data_ingestion_artifact: Output reference of data ingestion artifact stage
@@ -20,10 +21,6 @@ class ModelTraning:
 
         self.data_transformation_artifact = data_transformation_artifact
         self.model_trainer_config =model_trainer_config
-
-
-    def get_best_model(self,):
-        pass
 
     def initiate_model_trainer(self)  -> ModelTrainerArtifact:
         """
@@ -56,18 +53,12 @@ class ModelTraning:
             logging.info("Model evalutaion started")
             model_report : dict = evaluate_model(X_train,y_train,X_test,y_test,models)
 
-            """best_model_score = max(sorted(model_report.values()))
-            best_model_name = list(model_report.keys())[
-                list(model_report.values().index(best_model_score))
-            ]
-
-            best_model=models[best_model_name]"""
-
             best_model_name = max(model_report, key=model_report.get)
             best_model_score = model_report[best_model_name]
             best_model = models[best_model_name]
 
-            logging.info(f"Best model found , Model name;{best_model_name}, R2score:{best_model_score}")
+            logging.info(f"Best model found , Model name :{best_model_name}, R2score:{best_model_score}")
+            
 
             model_save_dir=self.model_trainer_config.model_trainer_trained_dir
             os.makedirs(model_save_dir,exist_ok=True)
